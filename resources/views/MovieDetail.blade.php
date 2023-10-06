@@ -4,7 +4,7 @@
         <div class="row">
             <div class="col-4">
                 @foreach($movie as $m)
-                <h2>{{ $m->movie_name }}</h2>
+                <h1>{{ $m->movie_name }}</h1>
                 <p><a href="">{{ $m->movie_year_on_air }}</a>-
                 @foreach ($ctr as $r)
                     @if ($m->critical_rate == $r->ctr_id)
@@ -18,18 +18,17 @@
             </div>
             <div class="col-8">
                 @foreach ($movie as $m )
-
-                <video style="max-width: 700px" controls>
+                <video style="max-width: 850px" controls>
                     <source src="{{ asset('Materials/Movies/' . $m->movie_id . '.mp4') }}" type="video/mp4">
                     Your browser does not support the video tag.
                 </video>
                 @endforeach
             </div>
         </div>
-        <div class="row">
+        <div class="row mt-5">
             <div class="col-4">
                 @foreach($movie as $m)
-                <img src="{{ asset('Materials/Movies/' . $m->movie_id . '.png') }}" alt="Movie poster" style="max-width: 250px"/>
+                <img src="{{ asset('Materials/Movies/' . $m->movie_id . '.png') }}" alt="Movie poster" style="max-width: 350px"/>
                 @endforeach
             </div>
             <div class="col-8">
@@ -37,10 +36,10 @@
                 <br>
                 @foreach ($mtype as $mt)
                     @if($m->movie_type_id == $mt->type_id)
-                        <p><a href="/type/{{ $mt->type_id }}">{{ $mt->type_name }}</a></p>
+                        <p id="type_movie"><a href="/type/{{ $mt->type_id }}"><span id="type_mv">{{ $mt->type_name }}</span></a></p>
                     @endif
                 @endforeach
-                <h5>Movie info</h5>
+                <h4>Movie info</h4>
                 <p>{{ $m->movie_info }}</p>
                 <p>
                     Director:
@@ -87,22 +86,19 @@
             </div>
         </div>
         <div class="row mt-5">
-            <div class="col-8">
+            <div class="col-12">
                 <h5>Review</h5>
                 @guest
                 <form method="post" action="/review" enctype="multipart/form-data">
                     @csrf
                     <div class="input-group mb-3 mt-3">
-                        <div class="input-group mb-3">
-                            <span class="input-group-text" id="basic-addon1">Movie:</span>
-                            <input name="movie" value="{{ $m->movie_id }}" class="form-control" aria-describedby="basic-addon1" readonly disabled>
-                          </div>
+                            <input name="movie" type="hidden"  value="{{ $m->movie_id }}" class="form-control" aria-describedby="basic-addon1" readonly disabled>
                         <div class="input-group">
                             <span class="input-group-text">Review:</span>
                             <textarea name="comment" class="form-control" placeholder="comment!" aria-label="With textarea" required disabled></textarea>
                         </div>
                         <div class="input-group mt-3">
-                            <input class="btn-outline-light" type="submit" value="review">
+                            <input class="btn btn-outline-primary" type="submit" value="review">
                         </div>
                     </div>
                 </form>
@@ -110,16 +106,13 @@
                 <form method="post" action="/review" enctype="multipart/form-data">
                     @csrf
                     <div class="input-group mb-3 mt-3">
-                        <div class="input-group mb-3">
-                            <span class="input-group-text" id="basic-addon1">Movie:</span>
-                            <input name="movie" value="{{ $m->movie_id }}" type="text" class="form-control hide" placeholder="{{ $m->movie_name }}" aria-label="Username" aria-describedby="basic-addon1" readonly>
-                          </div>
+                            <input name="movie" type="hidden"  value="{{ $m->movie_id }}" class="form-control" aria-describedby="basic-addon1" readonly disabled>
                         <div class="input-group">
                             <span class="input-group-text">{{ Auth::user()->name }}:</span>
                             <textarea name="comment" class="form-control" placeholder="comment!" aria-label="With textarea" required></textarea>
                         </div>
                         <div class="input-group mt-3">
-                            <input class="btn-outline-light" type="submit" value="review">
+                            <input class="btn btn-outline-primary" type="submit" value="review">
                         </div>
                     </div>
                 </form>

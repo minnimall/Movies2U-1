@@ -17,6 +17,9 @@
     href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
     <style>
         @import url( {{asset('css/web.css')}} );
+        body{
+            font-family: 'Prompt', sans-serif;
+        }
     </style>
 </head>
 <body>
@@ -41,6 +44,7 @@
                             <li><a class="dropdown-item" href="/addUserForm">Add user</a></li>
                             @else
                             <li><a class="dropdown-item" href="/MyWatchlist">Watch list</a></li>
+                            <li><a class="dropdown-item" href="/favpage">Fan Favorite</a></li>
                             @endif
                             <li>
                                 <form method="POST" action="{{ route('logout') }}">
@@ -57,18 +61,44 @@
     </div>
     <div class="container mt-3">
         @yield('content')
-        <hr class="mt-5">
     </div>
-    <div class="container-fluid mt-3">
-        <footer>
-            <div class="footer_social">
-                <ul>
-                    <li class="icon"><a href=""><i class="bi bi-facebook text-primary" style="font-size: 1.5rem;"></i></a></li>
-                    <li class="icon"><a href=""><i class="bi bi-twitter text-primary" style="font-size: 1.5rem;"></i></a></li>
-                    <li class="icon"><a href=""><i class="bi bi-instagram text-danger" style="font-size: 1.5rem;"></i></a></li>
-                    <li class="icon"><a href=""><i class="bi bi-github" style="font-size: 1.5rem;"></i></a></li>
-                </ul>
-                <p>@ 2023 by Movie2U</p>
+
+    <div class="container mt-5" >
+        <footer class="footer_nav">
+            <div class="row">
+                <div class="col-4 mt-5 justify-content-center align-item-center">
+                    <img class="model" src="{{ asset('./img/model.png') }}" alt="model">
+                </div>
+                <div class="col-4 mt-5 text-light text-center">
+                    <h3><i class="bi bi-envelope-at-fill text-light"></i> Contact us</h3>
+                    <p>dullapah.t@kkumail.com</p>
+                    <p>seubsak.s@kkumail.com</p>
+                    <p>korapat.s@kkumail.com</p>
+                </div>
+                <div class="col-4 mt-5 text-light text-center">
+                    <h3><i class="bi bi-telephone-fill text-light"></i> Telephone</h3>
+                    <p>094-391-9685</p>
+                    <p>099-115-9393</p>
+                    <p>093-115-5966</p>
+                </div>
+            </div>
+            <hr class="mx-auto justify-content-center text-secondary col-10">
+            <div class="row">
+                <div class="col-12 mt-1">
+                    <div class="footer_social text-white">
+                        <ul>
+                            <li class="icon mt-3"><a href=""><i class="bi bi-facebook text-light" style="font-size: 1.25rem;"></i></a></li>
+                            <li class="icon mt-3"><a href=""><i class="bi bi-twitter text-light" style="font-size: 1.25rem;"></i></a></li>
+                            <li class="icon mt-3"><a href=""><i class="bi bi-instagram text-light" style="font-size: 1.25rem;"></i></a></li>
+                            <li class="icon mt-3"><a href=""><i class="bi bi-github text-light" style="font-size: 1.25rem;"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 text-center mb-3 mt-1">
+                    <b class="text-center text-secondary">@2023 Movie2U - All rights reserved.</b>
+                </div>
             </div>
         </footer>
     </div>

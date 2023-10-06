@@ -14,6 +14,8 @@ use App\Models\Movie_type;
 use App\Models\Critical_rate;
 use App\Models\Movie_detail;
 use App\Models\User;
+use App\Models\favorite_movie;
+
 
 class MoviesController extends Controller
 {
@@ -24,7 +26,13 @@ class MoviesController extends Controller
         $emp = Employee::all();
         $mtype = Movie_type::all();
         $ctr = Critical_rate::all();
-        return view('movie2u.Home',compact('movie','mtype','emp','mtype','ctr','action','comedy'));
+        $favoriteMovies = favorite_movie::all();
+        $totalLikesByMovie = favorite_movie::select('movie_id', favorite_movie::raw('SUM(`like`) as total_likes'))
+            ->groupBy('movie_id')
+            ->orderByDesc('total_likes') // เรียงตาม total_likes จากมากไปน้อย
+            ->take(4) // แสดงเฉพาะ 4 อันดับแรก
+            ->get();
+        return view('movie2u.Home',compact('movie','mtype','emp','mtype','ctr','action','comedy', 'totalLikesByMovie', 'favoriteMovies'));
     }
     public function category(){
         $mtype = Movie_type::all();
@@ -225,40 +233,43 @@ class MoviesController extends Controller
     }
     public function addwatchlist($movieId)
     {
+        //ตรวจสอบผู้ใช้ได้ล็อกอินมั้ย
         if (Auth::check()) {
-            // ดึงข้อมูลผู้ใช้ที่ล็อกอินอยู่
+            // ดึงข้อมูลผู้ใช้ที่ล็อกอินอยู่เก็บไว้ในตัวแปร $user
             $user = Auth::user();
     
-            // ตรวจสอบว่าผู้ใช้ล็อกอินหรือไม่
+            // ตรวจสอบว่าผู้ใช้ล็อกอินหรือยังหากล็อกอินแล้วทำต่อ
             if ($user) {
                 // ตรวจสอบว่า movieId นี้มีอยู่ใน watchlist ของผู้ใช้หรือไม่
                 $checkWatchlist = Watchlist::where('user_id', $user->id)->where('movie_id', $movieId)->first();
 
                 if ($checkWatchlist) {
-                    // ถ้าหากมีอยู่แล้ว ไม่ต้องทำอะไร
-                    return redirect()->back();
+                    // ถ้าหากมีอยู่แล้ว โชว์ alert
+                    return redirect()->back()->with('alert', 'Movie already in watchlist.');
                 }
     
-                // สร้าง Watchlist object และกำหนดค่า 'user_id' และ 'movie_id'
+                // หากไม่พบ MovieId ใน watchlist ให้สร้างเพิ่มใน Watchlist object และกำหนดค่า 'user_id' และ 'movie_id'
                 $add_watchlist = new Watchlist();
                 $add_watchlist->user_id = $user->id;
                 $add_watchlist->movie_id = $movieId;
     
-                // บันทึกลงใน watchlist
+                // บันทึกลงในตาราง watchlist
                 $add_watchlist->save();
     
-                return redirect()->back();
+                //บันทึกเสร็จพร้อมโชว์ alert
+                return redirect()->back()->with('success', 'Movie added to watchlist successfully.');
             }
         }
     }
 
     public function show_allwatchlist(){
+        //ดึง user ID ของผู้ใช้ที่ล็อกอินอยู่
         $user_id = Auth::id();
 
         // ดึง movie_id ที่เกี่ยวข้องกับ user_id นี้จาก watchlist
         $watchlistMovies = watchlist::where('user_id', $user_id)->pluck('movie_id');
 
-        // ดึงข้อมูลหนังที่มี movie_id ใน watchlist
+        // ดึงข้อมูลหนังที่มี movie_id ใน watchlist 
         $moviesInWatchlist = Movie::whereIn('movie_id', $watchlistMovies)->get();
 
         return view('movie2u.Watchlist', compact('user_id', 'moviesInWatchlist'));
@@ -268,11 +279,11 @@ class MoviesController extends Controller
         $watchlistItem = watchlist::where('movie_id', $id)->first();
 
         if ($watchlistItem) {
-                $watchlistItem->delete();
+                $watchlistItem->delete(); /* ใช้ SoftDelete */ 
 
-            return redirect('/MyWatchlist')->with('success', 'Movie deleted successfully.');
+            return redirect('/MyWatchlist');
         } else {
-            return redirect('/MyWatchlist')->with('error', 'Movie not found.');
+            return redirect('/MyWatchlist');
         }
     }
 
@@ -292,5 +303,59 @@ class MoviesController extends Controller
         $delcomment = review::where('id',$Id)->first();
         $delcomment->forcedelete();
         return redirect()->back();
+    }
+
+    public function Favpage()
+    {
+        $user_id = auth()->user()->id;
+        $favoriteMovies = favorite_movie::where('user_id', $user_id)->get();
+
+        return view('movie2u.favmovies', compact('user_id', 'favoriteMovies'));
+    }
+
+    public function AddFav($movieId)
+    {
+        $user_id = auth()->user()->id;
+
+        // ตรวจสอบว่าคู่ user_id และ movie_id นี้มีอยู่แล้วหรือไม่
+        $existingFavorite = favorite_movie::where('user_id', $user_id)
+            ->where('movie_id', $movieId)
+            ->first();
+
+        if (!$existingFavorite) {
+            // ถ้ายังไม่มีให้เพิ่มเข้าไปในตาราง favorite_movies
+            $favorite = new favorite_movie();
+            $favorite->user_id = $user_id;
+            $favorite->movie_id = $movieId;
+            $favorite->like = 1; // กำหนดค่า like เป็น 1
+            $favorite->save();
+        }
+
+        return redirect()->back(); // หลังจากเพิ่มเสร็จให้กลับไปยังหน้าก่อนหน้า
+    }
+
+    public function delFav($id)
+    {
+        $user_id = auth()->user()->id;
+
+        // ใช้ forcedelete เพื่อลบรายการที่ตรงกันจากตาราง favorite_movies
+        favorite_movie::where('user_id', $user_id)
+            ->where('movie_id', $id)
+            ->forceDelete();
+
+        return redirect()->back();
+    }
+
+    public function like()
+    {
+        // รวมยอดไลค์ตาม movie_id สำหรับทุก user
+        $totalLikesByMovie = favorite_movie::select('movie_id', favorite_movie::raw('SUM(`like`) as total_likes'))
+            ->groupBy('movie_id')
+            ->get();
+
+        // ดึงข้อมูลหนังโปรดของทุก user
+        $favoriteMovies = favorite_movie::all();
+
+        return view('movie2u.favmovies', compact('totalLikesByMovie', 'favoriteMovies'));
     }
 }
