@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="container">
-        <h2 class="movieslist mt-5" style="border-left: 4px solid red;">Fan Favorite</h2>
+        <h2 class="movieslist mt-5" style="border-left: 4px solid red;">My Favorite</h2>
         <div class="row mt-4">
             @php
                 $displayedMovies = []; // สร้างตัวแปรเพื่อเก็บหนังที่เคยแสดงแล้ว
@@ -18,16 +18,14 @@
                                 <div class="card-body mt-2">
                                     @foreach ($totalLikesByMovie as $likes)
                                         @if ($likes->movie_id == $miw->movie_id)
-                                            <h8>
-                                                <b>Total Likes : {{ $likes->total_likes }}</b>
-                                            </h8>
+                                            
                                         @endif
                                     @endforeach
                                 </div>
                                 <div class="button-overlay">
                                     @if (Auth::user()->roles == 1)
                                         <a href="/delfav/{{ $miw->movie_id }}" class="btn delete-btn-primary mt-1"
-                                            onclick="return confirm('Are you sure you want to delete this movie?')">Remove</a>
+                                            onclick="return confirm('Are you sure you want to unlike this movie?')">Unlike</a>
                                     @endif
                                 </div>
                             </div>

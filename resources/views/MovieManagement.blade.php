@@ -64,7 +64,7 @@
                             <a href="">{{ $r->ctr_name }}</a>
                             @endif
                         @endforeach
-                        - {{ number_format($m->movie_time / 60, 1) }}h
+                        -{{ floor($m->movie_time/60) }}h {{ floor($m->movie_time%60) }}m
                     </p>
                 </div>
                 <div class="card-body">

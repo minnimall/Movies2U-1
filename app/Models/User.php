@@ -60,10 +60,11 @@ class User extends Authenticatable
         'profile_photo_url',
     ];
     public function userType()
-{
-    return $this->belongsTo(User_type::class);
-}
-    function review(){
-    return $this->belongsToMany(review::class);
+    {
+        return $this->belongsTo(User_type::class);
     }
+    function review(){
+        return $this->belongsToMany(review::class);
+    }
+    
 }

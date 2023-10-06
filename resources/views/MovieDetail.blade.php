@@ -106,7 +106,11 @@
                 <form method="post" action="/review" enctype="multipart/form-data">
                     @csrf
                     <div class="input-group mb-3 mt-3">
-                            <input name="movie" type="hidden"  value="{{ $m->movie_id }}" class="form-control" aria-describedby="basic-addon1" readonly disabled>
+                    <div class="input-group mb-3">
+                                <input name="movie" value="{{ $m->movie_id }}" type="hidden" class="form-control hide"
+                                    placeholder="{{ $m->movie_name }}" aria-label="Username" aria-describedby="basic-addon1"
+                                    readonly>
+                            </div>                            
                         <div class="input-group">
                             <span class="input-group-text">{{ Auth::user()->name }}:</span>
                             <textarea name="comment" class="form-control" placeholder="comment!" aria-label="With textarea" required></textarea>
@@ -116,6 +120,7 @@
                         </div>
                     </div>
                 </form>
+                
                 @endguest
                 <hr class="mt-5">
                 <h5>User review!</h5>

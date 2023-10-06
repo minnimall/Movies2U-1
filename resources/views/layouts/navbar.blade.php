@@ -43,8 +43,8 @@
                             <li><a class="dropdown-item" href="/moviemanagement">Management</a></li>
                             <li><a class="dropdown-item" href="/addUserForm">Add user</a></li>
                             @else
-                            <li><a class="dropdown-item" href="/MyWatchlist">Watch list</a></li>
-                            <li><a class="dropdown-item" href="/favpage">Fan Favorite</a></li>
+                            <li><a class="dropdown-item" href="/MyWatchlist">My Watch list</a></li>
+                            <li><a class="dropdown-item" href="/favpage">My Favorite</a></li>
                             @endif
                             <li>
                                 <form method="POST" action="{{ route('logout') }}">

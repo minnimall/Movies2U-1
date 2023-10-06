@@ -21,7 +21,7 @@ class MoviesController extends Controller
 {
     public function home(){
         $action = Movie_type::where('type_id',"MT01")->get();
-        $comedy = Movie_type::where('type_id',"MT03")->get();
+        $comedy = Movie_type::where('type_id',"MT11")->get();
         $movie = Movie::all();
         $emp = Employee::all();
         $mtype = Movie_type::all();
@@ -245,7 +245,7 @@ class MoviesController extends Controller
 
                 if ($checkWatchlist) {
                     // ถ้าหากมีอยู่แล้ว โชว์ alert
-                    return redirect()->back()->with('alert', 'Movie already in watchlist.');
+                    return redirect()->back()->with('alert', 'This movie is already in your watchlist.');
                 }
     
                 // หากไม่พบ MovieId ใน watchlist ให้สร้างเพิ่มใน Watchlist object และกำหนดค่า 'user_id' และ 'movie_id'
@@ -279,7 +279,7 @@ class MoviesController extends Controller
         $watchlistItem = watchlist::where('movie_id', $id)->first();
 
         if ($watchlistItem) {
-                $watchlistItem->delete(); /* ใช้ SoftDelete */ 
+                $watchlistItem->delete(); // ใช้ SoftDelete
 
             return redirect('/MyWatchlist');
         } else {
@@ -301,7 +301,7 @@ class MoviesController extends Controller
 
     public function Delcomment($Id){
         $delcomment = review::where('id',$Id)->first();
-        $delcomment->forcedelete();
+        $delcomment->delete();
         return redirect()->back();
     }
 
@@ -341,7 +341,7 @@ class MoviesController extends Controller
         // ใช้ forcedelete เพื่อลบรายการที่ตรงกันจากตาราง favorite_movies
         favorite_movie::where('user_id', $user_id)
             ->where('movie_id', $id)
-            ->forceDelete();
+            ->delete();
 
         return redirect()->back();
     }

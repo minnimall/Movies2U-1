@@ -51,7 +51,7 @@
 
         <!-- topic Fan Favorite -->
         <div class="top10 mt-5">
-            <h2 class="h2_top10" style="border-left: 4px solid red;">Fan Favorite</h2>
+            <h2 class="h2_top10" style="border-left: 4px solid red;">Top 4 Fan Favorite</h2>
             <div class="row mt-4">
                 @php
                     $displayedMovies = []; // สร้างตัวแปรเพื่อเก็บหนังที่เคยแสดงแล้ว
@@ -70,11 +70,11 @@
                         @endif
                         <div class="col-3">
                             <div class="card mt-4" style="width: auto">
-                                <a></a><img src="{{ asset('Materials/Movies/' . $likes->movie_id . '.png') }}" class="card-img-top_fan"></a>
+                                <a href="{{ url('/moviedetail/'.$likes->movie_id) }}"><img src="{{ asset('Materials/Movies/' . $likes->movie_id . '.png') }}" class="card-img-top_fan"></a>
                                 <div class="card-body mt-2">
-                                    <h8>
+                                    <h5>
                                         <b>Total Likes : {{ $likes->total_likes }}</b>
-                                    </h8>
+                                    </h5>
                                 </div>
                             </div>
                         </div>
@@ -85,7 +85,7 @@
                     @endif
                 @endforeach
 
-                {{-- ตรวจสอบหนังที่มียอดไลค์สูงกว่าหนังที่แสดงแล้วและแสดงหากมี --}}
+                <!-- {{-- ตรวจสอบหนังที่มียอดไลค์สูงกว่าหนังที่แสดงแล้วและแสดงหากมี --}}
                 @foreach ($favoriteMovies as $miw)
                     @if (!in_array($miw->movie_id, $displayedMovies))
                         @if ($count >= 4)
@@ -94,14 +94,14 @@
                         @if ($miw->user_id == Auth::user()->id)
                             <div class="col-3">
                                 <div class="card mt-4" style="width: auto">
-                                    <a></a><img src="{{ asset('Materials/Movies/' . $miw->movie_id . '.png') }}" class="card-img-top_fan">
+                                <a href="{{ url('/moviedetail/'.$likes->movie_id) }}"><img src="{{ asset('Materials/Movies/' . $likes->movie_id . '.png') }}" class="card-img-top_fan"></a>
                                     </a>
                                     <div class="card-body mt-2">
                                         @foreach ($totalLikesByMovie as $likes)
                                             @if ($likes->movie_id == $miw->movie_id)
-                                                <h8>
+                                                <h5>
                                                     <b>Total Likes : {{ $likes->total_likes }}</b>
-                                                </h8>
+                                                </h5>
                                             @endif
                                         @endforeach
                                     </div>
@@ -113,7 +113,7 @@
                             @endphp
                         @endif
                     @endif
-                @endforeach
+                @endforeach -->
             </div>
         </div>
 
@@ -127,6 +127,7 @@
                     <div class="card mt-5" style="width: auto">
                         <a href="/moviedetail/{{ $m->movie_id }}">
                             <img class="card-img" src="{{ asset('Materials/Movies/' . $m->movie_id . '.png') }}" alt="Movie poster" width="300px" height="450px"/>
+                            
                             <a href="/addfav/{{ $m->movie_id }}" class="btn btn-link"><i class="bi bi-heart text-danger"></i>
                         </a>
                         <div class="card-body">
@@ -135,12 +136,12 @@
                                 <i class="bi bi-star-fill text-warning"><b class="text-black"> {{ $m->movie_score }} </b></i>
                             </h5>
                             @guest
-                            <div class="d-flex justify-content-between align-items-center mt-5">
+                            <div class="d-flex justify-content-between align-items-center mt-4">
                                 <a href="{{ url('/moviedetail/'.$m->movie_id) }}" class="btn btn-warning" style="width: 48%;">Detail</a>
                                 <a href="/addwatchlist/{{ $m->movie_id}}" class="btn btn-dark" style="width: 48%;"><i class="bi bi-plus-lg"></i> Watchlist</a>
                             </div>
                             @else
-                            <div class="d-flex justify-content-between align-items-center mt-5">
+                            <div class="d-flex justify-content-between align-items-center mt-4">
                                 @if( Auth::user()->roles  == 1)
                                 <a href="{{ url('/moviedetail/'.$m->movie_id) }}" class="btn btn-warning" style="width: 48%;">Detail</a>
                                 <a href="/addwatchlist/{{ $m->movie_id}}" class="btn btn-dark" style="width: 48%;"><i class="bi bi-plus-lg"></i> Watchlist</a>
@@ -160,7 +161,7 @@
         </div>
 
         <!-- topic Category Movies -->
-        <p class="title_category_Movies mt-5">Category Movies</p>
+        <!-- <p class="title_category_Movies mt-5">Category Movies</p>
         @foreach ($mtype as $mt)
             @php
                 $moviesInCategory = $movie->filter(function ($m) use ($mt) {
@@ -184,12 +185,12 @@
                                             <i class="bi bi-star-fill text-warning"><b class="text-black"> {{ $m->movie_score }} </b></i>
                                         </h5>
                                         @guest
-                                        <div class="d-flex justify-content-between align-items-center mt-5">
+                                        <div class="d-flex justify-content-between align-items-center mt-4">
                                             <a href="{{ url('/moviedetail/'.$m->movie_id) }}" class="btn btn-warning" style="width: 48%;">Detail</a>
                                             <a href="/addwatchlist/{{ $m->movie_id}}" class="btn btn-dark" style="width: 48%;"><i class="bi bi-plus-lg"></i> Watchlist</a>
                                         </div>
                                         @else
-                                        <div class="d-flex justify-content-between align-items-center mt-5">
+                                        <div class="d-flex justify-content-between align-items-center mt-4">
                                             @if( Auth::user()->roles  == 1)
                                             <a href="{{ url('/moviedetail/'.$m->movie_id) }}" class="btn btn-warning" style="width: 48%;">Detail</a>
                                             <a href="/addwatchlist/{{ $m->movie_id}}" class="btn btn-dark" style="width: 48%;"><i class="bi bi-plus-lg"></i> Watchlist</a>
@@ -209,9 +210,9 @@
                     </div>
                 </div>
             @endif
-        @endforeach
+        @endforeach -->
 
-        {{-- <div class="top10 mt-4">
+        <div class="top10 mt-4">
             <h2 class="category">Action</h2>
             <div class="row">
             @foreach ($action as $act)
@@ -221,21 +222,33 @@
                     <div class="card mt-4" style="width: auto">
                         <a href="/moviedetail/{{ $m->movie_id }}">
                             <img class="card-img" src="{{ asset('Materials/Movies/' . $m->movie_id . '.png') }}" alt="Movie poster" width="300px" height="450px"/>
+                            <a href="/addfav/{{ $m->movie_id }}" class="btn btn-link"><i class="bi bi-heart text-danger"></i>
                         </a>
                         <div class="card-body">
                             <h5 class="card-title  d-flex justify-content-between align-items-center">
                                 <b>{{ $m->movie_name }}</b>
                                 <i class="bi bi-star-fill text-warning"><b class="text-black"> {{ $m->movie_score }} </b></i>
+                                
                             </h5>
-                            <div class="d-flex justify-content-between align-items-center mt-5">
+                            @guest
+                            <div class="d-flex justify-content-between align-items-center mt-4">
+                                <a href="{{ url('/moviedetail/'.$m->movie_id) }}" class="btn btn-warning" style="width: 48%;">Detail</a>
+                                <a href="/addwatchlist/{{ $m->movie_id}}" class="btn btn-dark" style="width: 48%;"><i class="bi bi-plus-lg"></i> Watchlist</a>
+                            </div>
+                            @else
+                            <div class="d-flex justify-content-between align-items-center mt-4">
                                 @if( Auth::user()->roles  == 1)
                                 <a href="{{ url('/moviedetail/'.$m->movie_id) }}" class="btn btn-warning" style="width: 48%;">Detail</a>
                                 <a href="/addwatchlist/{{ $m->movie_id}}" class="btn btn-dark" style="width: 48%;"><i class="bi bi-plus-lg"></i> Watchlist</a>
                                 @elseif ( Auth::user()->roles  == 2 )
-                                <a href="/moviemanagement/editForm/{{ $m->movie_id }}" class="btn btn-warning">Edit</a>
-                                <a href="/moviemanagement/delete/{{ $m->movie_id }}" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this movie?')">Delete</a>
+                                <a href="/moviemanagement/editForm/{{ $m->movie_id }}" class="btn btn-warning" style="width: 48%;">Edit</a>
+                                <a href="/moviemanagement/delete/{{ $m->movie_id }}" class="btn btn-danger" style="width: 48%;" onclick="return confirm('Are you sure you want to delete this movie?')">Delete</a>
+                                @else
+                                <a href="{{ url('/moviedetail/'.$m->movie_id) }}" class="btn btn-warning" style="width: 48%;">Detail</a>
+                                <a href="/addwatchlist/{{ $m->movie_id}}" class="btn btn-dark" style="width: 48%;"><i class="bi bi-plus-lg"></i> Watchlist</a>
                                 @endif
                             </div>
+                            @endguest
                         </div>
                     </div>
                 </div>
@@ -255,16 +268,32 @@
                     <div class="card mt-4" style="width: auto">
                         <a href="/moviedetail/{{ $m->movie_id }}">
                             <img class="card-img" src="{{ asset('Materials/Movies/' . $m->movie_id . '.png') }}" alt="Movie poster" width="300px" height="450px"/>
+                            <a href="/addfav/{{ $m->movie_id }}" class="btn btn-link"><i class="bi bi-heart text-danger"></i>
                         </a>
                         <div class="card-body">
                             <h5 class="card-title  d-flex justify-content-between align-items-center">
                                 <b>{{ $m->movie_name }}</b>
                                 <i class="bi bi-star-fill text-warning"><b class="text-black"> {{ $m->movie_score }} </b></i>
                             </h5>
-                            <div class="d-flex justify-content-between align-items-center mt-5">
+                            @guest
+                            <div class="d-flex justify-content-between align-items-center mt-4">
                                 <a href="{{ url('/moviedetail/'.$m->movie_id) }}" class="btn btn-warning" style="width: 48%;">Detail</a>
                                 <a href="/addwatchlist/{{ $m->movie_id}}" class="btn btn-dark" style="width: 48%;"><i class="bi bi-plus-lg"></i> Watchlist</a>
                             </div>
+                            @else
+                            <div class="d-flex justify-content-between align-items-center mt-4">
+                                @if( Auth::user()->roles  == 1)
+                                <a href="{{ url('/moviedetail/'.$m->movie_id) }}" class="btn btn-warning" style="width: 48%;">Detail</a>
+                                <a href="/addwatchlist/{{ $m->movie_id}}" class="btn btn-dark" style="width: 48%;"><i class="bi bi-plus-lg"></i> Watchlist</a>
+                                @elseif ( Auth::user()->roles  == 2 )
+                                <a href="/moviemanagement/editForm/{{ $m->movie_id }}" class="btn btn-warning" style="width: 48%;">Edit</a>
+                                <a href="/moviemanagement/delete/{{ $m->movie_id }}" class="btn btn-danger" style="width: 48%;" onclick="return confirm('Are you sure you want to delete this movie?')">Delete</a>
+                                @else
+                                <a href="{{ url('/moviedetail/'.$m->movie_id) }}" class="btn btn-warning" style="width: 48%;">Detail</a>
+                                <a href="/addwatchlist/{{ $m->movie_id}}" class="btn btn-dark" style="width: 48%;"><i class="bi bi-plus-lg"></i> Watchlist</a>
+                                @endif
+                            </div>
+                            @endguest
                         </div>
                     </div>
                 </div>
@@ -272,7 +301,7 @@
                 @endforeach
             @endforeach
            </div>
-        </div> --}}
+        </div>
         <div class="d-grid gap-2 col-4 mx-auto mt-5">
             <a href="/category"><button class="btn btn-warning d-grid gap-2 col-4 mx-auto " type="button">More . . .</button></a>
         </div>
@@ -280,7 +309,7 @@
     </div>
 
     <!-- Footer -->
-    {{-- <div class="container-fluid">
+    <!-- {{-- <div class="container-fluid">
         <footer>
             <div class="footer_social">
                 <ul>
@@ -293,6 +322,6 @@
             </div>
 
         </footer>
-    </div> --}}
+    </div> --}} -->
 
 @endsection
