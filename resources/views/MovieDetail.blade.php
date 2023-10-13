@@ -26,6 +26,7 @@
                         </div>
                       </div>
                     @endforeach
+                    
          @foreach ($replies as $rp)
                     <div class="modal fade" id="editModal_{{ $rp->id }}" tabindex="-1" aria-labelledby="editModal" aria-hidden="true">
                         <div class="modal-dialog">
