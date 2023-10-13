@@ -127,7 +127,7 @@
                     <div class="card mt-5" style="width: auto">
                         <a href="/moviedetail/{{ $m->movie_id }}">
                             <img class="card-img" src="{{ asset('Materials/Movies/' . $m->movie_id . '.png') }}" alt="Movie poster" width="300px" height="450px"/>
-                            
+
                             <a href="/addfav/{{ $m->movie_id }}" class="btn btn-link"><i class="bi bi-heart text-danger"></i>
                         </a>
                         <div class="card-body">
@@ -228,7 +228,7 @@
                             <h5 class="card-title  d-flex justify-content-between align-items-center">
                                 <b>{{ $m->movie_name }}</b>
                                 <i class="bi bi-star-fill text-warning"><b class="text-black"> {{ $m->movie_score }} </b></i>
-                                
+
                             </h5>
                             @guest
                             <div class="d-flex justify-content-between align-items-center mt-4">
